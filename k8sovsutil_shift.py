@@ -128,6 +128,9 @@ def create_ovs_ruleset_for_each_node(node_list, service_list, pod_list):
             for pod in pod_list.values():
                 if pod.node_name == node.name and pod.node_ip != pod.ip_address:
                     flows.write(
+                        "table=5,priority=110,in_port={outport},ip,nw_dst={pod_ip},actions=set_field:{mac_address}->eth_dst,output:in_port\n".format(
+                            pod_ip=pod.ip_address, mac_address=ip2mac(pod.ip_address), outport=last_octet(pod.ip_address)))
+                    flows.write(
                         "table=5,priority=100,ip,nw_dst={pod_ip},actions=set_field:{mac_address}->eth_dst,output:{outport}\n".format(
                             pod_ip=pod.ip_address, mac_address=ip2mac(pod.ip_address), outport=last_octet(pod.ip_address)))
 
