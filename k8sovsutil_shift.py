@@ -274,6 +274,8 @@ def update_ovs_rules(node_list, log_num):
                 else:  # add flow rule
                     for r in rules:
                         call([ "ovs-ofctl", "-O openflow13", "add-flow", "tcp:{node_ip}:16633".format(node_ip=node.ip_address), "{params}".format(params=r) ])
+            flow_file = "config" + "/" + node.name + ".flows"
+            call([ "ovs-ofctl", "-O openflow13", "add-flows", "tcp:{node_ip}:16633".format(node_ip=node.ip_address), "{g_file}".format(g_file=flow_file)])
 
 
         # due to the file name synchronization folder have to cleaned
